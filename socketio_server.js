@@ -8,7 +8,7 @@ app.get('/', function(req, rsp) {
     rsp.sendfile('index.html');
 });
 
-var queueName = 'scholar_notebook_work',
+var jobsQueueName = 'scholar_notebook_work',
     announceQueueName = 'notecard_updates',
     jobsChannel,
     announceQueue;
@@ -29,7 +29,7 @@ var prepRabbitAnnounceChannel = function(conn) {
 amqp.connect('amqp://localhost').then(function(conn) {
     return conn.createChannel().then(function(ch) {
         jobsChannel = ch;
-        return ch.assertQueue(queueName, {durable: true});
+        return ch.assertQueue(jobsQueueName, {durable: true});
     }).then(function() {
         console.log('ready to post to rabbit jobs channel');
         return prepRabbitAnnounceChannel(conn);
@@ -52,7 +52,7 @@ amqp.connect('amqp://localhost').then(function(conn) {
                 var messageString = JSON.stringify(message);
                 console.log('notecard_update: ' + messageString);
                 console.log('sending update job to rabbit');
-                jobsChannel.sendToQueue(queueName, new Buffer(messageString), {deliveryMode:true});
+                jobsChannel.sendToQueue(jobsQueueName, new Buffer(messageString), {deliveryMode:true});
             });
         });
     });
