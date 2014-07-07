@@ -13,9 +13,6 @@
             var socket = io();
             var notecardTextarea = document.querySelector('div[data-notecard-id="1"] textarea');
 
-            socket.on('connection', function(socket) {
-                socket.join('project:1');
-            });
             socket.on('notecard_updated', function(msg) {
                 console.log('message received', msg);
                 notecardTextarea.value = msg.text;
