@@ -1,0 +1,22 @@
+{
+    "name": "easybib/scholar-application",
+    "description": "",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Yitzchak Schaffer",
+            "email": "yitzchak@imagineeasy.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "videlalvaro/php-amqplib": "2.*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-0": {
+            "EasyBib\\": "src/"
+        }
+    }
+}
