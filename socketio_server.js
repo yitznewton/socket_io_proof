@@ -48,10 +48,11 @@ io.on('connection', function(socket) {
     announceChannel.consume(announceQueue, function(message) {
         var update = JSON.parse(message.content);
         console.log('receiving announcement from rabbit: ' + message.content);
-        var room = 'project:' + update.project_id;
-        console.log('sending update to browser clients on room ' + room);
-        socket.emit('notecard_updated', update);
+        console.log('sending update to browser clients');
+        io.emit('notecard_updated', update);
     }, {noack: true});
+
+    console.log('listening for announcements from rabbit');
 });
 
 var port = process.argv[2];
