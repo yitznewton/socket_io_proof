@@ -17,8 +17,8 @@
                 socket.join('project:1');
             });
             socket.on('notecard_updated', function(msg) {
-                console.log('message received: ' + msg);
-                notecardTextarea.value = msg;
+                console.log('message received', msg);
+                notecardTextarea.value = msg.text;
             });
 
             notecardTextarea.addEventListener('blur', function() {

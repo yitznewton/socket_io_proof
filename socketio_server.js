@@ -9,15 +9,30 @@ app.get('/', function(req, rsp) {
 });
 
 var queueName = 'scholar_notebook_work',
+    announceQueueName = 'notecard_updates',
     jobsChannel,
-    announceChannel;
+    announceChannel,
+    announceQueue;
 
 amqp.connect('amqp://localhost').then(function(conn) {
-  return when(conn.createChannel().then(function(ch) {
-    ch.assertQueue(queueName, {durable: true});
-    jobsChannel = ch;
-    console.log('rabbit ready to post to jobs channel');
-  }));
+    return conn.createChannel().then(function(ch) {
+        jobsChannel = ch;
+        return ch.assertQueue(queueName, {durable: true});
+    }).then(function() {
+        console.log('ready to post to rabbit jobs channel');
+    }).then(function() {
+        conn.createChannel().then(function(ch) {
+            announceChannel = ch;
+            ch.assertExchange(announceQueueName, 'fanout', {durable: false}).then(function() {
+                return ch.assertQueue('', {exclusive: true});
+            }).then(function(queueOk) {
+                announceQueue = queueOk.queue;
+                return ch.bindQueue(announceQueue, announceQueueName, '');
+            }).then(function() {
+                console.log('ready to listen for announcements from rabbit');
+            });
+        });
+    });
 });
 
 io.on('connection', function(socket) {
@@ -26,12 +41,21 @@ io.on('connection', function(socket) {
     socket.on('notecard_update', function(message) {
         var messageString = JSON.stringify(message);
         console.log('notecard_update: ' + messageString);
+        console.log('sending update job to rabbit');
         jobsChannel.sendToQueue(queueName, new Buffer(messageString), {deliveryMode:true});
-        console.log('rabbit notified');
     });
+
+    announceChannel.consume(announceQueue, function(message) {
+        var update = JSON.parse(message.content);
+        console.log('receiving announcement from rabbit: ' + message.content);
+        var room = 'project:' + update.project_id;
+        console.log('sending update to browser clients on room ' + room);
+        socket.emit('notecard_updated', update);
+    }, {noack: true});
 });
 
+var port = process.argv[2];
 
-http.listen(8080, function() {
-    console.log('listening on 8080');
+http.listen(port, function() {
+    console.log('listening on port ' + port);
 });

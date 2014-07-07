@@ -16,6 +16,11 @@ class NotecardUpdateAnnouncer
         $this->channel->exchange_declare(self::CHANNEL_NAME, 'fanout', false, false, false);
     }
 
+    public function __destruct()
+    {
+        $this->channel->close();
+    }
+
     public function announce(array $data)
     {
         $json = json_encode($data);
