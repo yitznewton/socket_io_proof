@@ -4,6 +4,7 @@
 
 ```bash
 $ vagrant up
+$ vagrant ssh -c /vagrant/install.sh
 ```
 
 ## Running
