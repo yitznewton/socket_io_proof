@@ -3,23 +3,16 @@
 ## Installation
 
 ```bash
-$ vagrant ssh -c '/vagrant/install.sh'
+$ vagrant up
 ```
 
 ## Running
 
 ```bash
-$ vagrant up
-$ vagrant ssh -c /vagrant/run.sh
-```
+$ vagrant ssh
 
-In Vagrant session (`vagrant ssh`):
-
-```bash
-$ cd /vagrant/
-$ nodejs socketio_server.js 8080 &
-$ nodejs socketio_server.js 8081 &
-$ php application/scholard.php &
+# in vagrant shell:
+$ /vagrant/run.sh
 ```
 
 Now point separate browser sessions to
