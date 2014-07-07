@@ -10,6 +10,7 @@ $ vagrant ssh -c '/vagrant/install.sh'
 
 ```bash
 $ vagrant up
+$ vagrant ssh -c /vagrant/run.sh
 ```
 
 In Vagrant session (`vagrant ssh`):
