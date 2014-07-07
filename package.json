@@ -9,6 +9,7 @@
     "socket.io": "~1.0.6",
     "when": "~3.3.1"
   },
+  "repository": "git@github.com:yitznewton/socket_io_proof.git",
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

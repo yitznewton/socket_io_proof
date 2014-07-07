@@ -3,16 +3,7 @@
 ## Installation
 
 ```bash
-$ sudo aptitude install \
-  openssh-server git-core build-essential gcc tree \
-  rabbitmq-server \
-  php5-dev php5-cli php5-curl php5-sqlite sqlite3 \
-  openssl libssl-dev
-
-$ vagrant ssh -c 'sqlite3 /vagrant/application/scholar.sqlite3 < /vagrant/application/data/notecard.sql'
-$ vagrant ssh -c 'curl -sS https://getcomposer.org/installer | php'
-$ vagrant ssh -c 'cd /vagrant/application && ~/composer.phar install'
-$ vagrant ssh -c 'cd /vagrant && npm install'
+$ vagrant ssh -c '/vagrant/install.sh'
 ```
 
 ## Running
@@ -24,6 +15,7 @@ $ vagrant up
 In Vagrant session (`vagrant ssh`):
 
 ```bash
+$ cd /vagrant/
 $ nodejs socketio_server.js 8080 &
 $ nodejs socketio_server.js 8081 &
 $ php application/scholard.php &
